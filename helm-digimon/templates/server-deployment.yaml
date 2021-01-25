@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+    app: digimon-service
+  name: server
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: digimon-service
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: server
+        app: digimon-service
+    spec:
+      containers:
+        - command:
+            - go
+            - run
+            - cmd/main.go
+          image: core.harbor.domain/devops/digimon-service
+          imagePullPolicy: Always
+          name: server
+          ports:
+            - containerPort: 6000
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: weather
+    app: weather-service
+  name: weather
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: weather-service
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: weather
+        app: weather-service
+    spec:
+      containers:
+        - command:
+            - go
+            - run
+            - cmd/main.go
+          image: core.harbor.domain/devops/weather-service
+          imagePullPolicy: Always
+          name: weather
+          ports:
+            - containerPort: 6100
+          resources: {}
+      restartPolicy: Always
+status: {}
